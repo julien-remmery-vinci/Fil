@@ -40,6 +40,16 @@ int Fil_resize(Fil *fil, int resize_factor)
     return 0;
 }
 
+unsigned long Fil_len(const char *str)
+{
+    const char *tmp = str;
+    while (*tmp)
+    {
+        ++tmp;
+    }
+    return tmp - str;
+}
+
 int Fil_append(Fil *fil, char *str)
 {
     if (!fil || !str) return FIL_ERR_PARAM;

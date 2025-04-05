@@ -51,9 +51,11 @@ typedef struct {
 } Fil;
 
 /**
- * Use fil.len wtf.
+ * Returns the length of the provided null terminated string, 0 if str is NULL;
+ * 
+ * Undefined behavior if the string is not null terminated.
  */
-// unsigned long Fil_len(Fil *fil);
+unsigned long Fil_len(const char *str);
 
 /**
  * Internal function used to resize the capacity of a Fil struct string.

@@ -11,6 +11,12 @@
         PASS(#test);\
 })\
 
+void Fil_len_test()
+{
+    ASSERT(Fil_len("Test") == 4);
+    ASSERT(Fil_len("\x00\x01") == 0);
+}
+
 void Fil_resize_test()
 {
     Fil fil = {0};
@@ -24,6 +30,7 @@ void Fil_resize_test()
 
 int main(void)
 {
+    Fil_len_test();
     Fil_resize_test();
     return 0;
 }
