@@ -62,7 +62,9 @@ unsigned long Fil_cpy(char *dest, const char *src)
 
 unsigned long Fil_cmp(char *s1, const char *s2)
 {
-    while(*s1 && *s2)
+    if (!s1 ||!s2) return FIL_ERR_PARAM;
+
+    while(*s1 || *s2)
     {
         if (*s1++ != *s2++)
         {

@@ -37,8 +37,11 @@ void Fil_len_test()
 
 void Fil_cmp_test()
 {
+    ASSERT(Fil_cmp(NULL, "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_cmp("Hello", NULL) & FIL_ERR_PARAM);
     ASSERT(Fil_cmp("Hello, world!", "Hello, world!") == 0);
     ASSERT(Fil_cmp("Hello, world!", "Hello, Belgium!") != 0);
+    ASSERT(Fil_cmp("Hello", "Hello!") != 0);
 }
 
 void Fil_cpy_test()
