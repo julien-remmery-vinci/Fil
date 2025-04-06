@@ -65,7 +65,7 @@ unsigned long Fil_cpy(char *dest, const char *src)
     return 0;
 }
 
-unsigned long Fil_cmp(char *s1, const char *s2)
+unsigned long Fil_cmp(const char *s1, const char *s2)
 {
     if (!s1 ||!s2) return FIL_ERR_PARAM;
 
@@ -133,17 +133,116 @@ int Fil_replacei(Fil *fil, const char *seq, unsigned int index)
     return FIL_NOT_IMPLEMENTED;
 }
 
-void* Fil_searchf(Fil *fil, const char *seq)
+const char* Fil_searchf(Fil *fil, const char *seq)
 {
+    if (!fil || !seq) return ((void*)0);
+
+    const char *tmp = seq;
+    unsigned long seq_len = Fil_len(seq);
+    unsigned long down_counter = seq_len;
+    char *current = fil->string;
+
+    while (*current)
+    {
+        if (*current == *tmp)
+        {
+            char *ptr = current;
+            while(*current == *tmp && down_counter)
+            {
+                current++;
+                tmp++;
+                down_counter--;
+            }
+            if (!down_counter)
+            {
+                return ptr;
+            }
+            else
+            {
+                tmp = seq;
+                down_counter = seq_len;
+            }
+        }
+        else
+        {
+            current++;
+        }
+    }
     return ((void*)0);
 }
 
-void* Fil_searchl(Fil *fil, const char *seq)
+const char* Fil_searchl(Fil *fil, const char *seq)
 {
-    return ((void*)0);
+    if (!fil || !seq) return ((void*)0);
+
+    const char *tmp = seq;
+    unsigned long seq_len = Fil_len(seq);
+    unsigned long down_counter = seq_len;
+    char *current = fil->string;
+    char *found_ptr = ((void*)0);
+
+    while (*current)
+    {
+        if (*current == *tmp)
+        {
+            char *ptr = current;
+            while(*current == *tmp && down_counter)
+            {
+                current++;
+                tmp++;
+                down_counter--;
+            }
+            if (!down_counter)
+            {
+                found_ptr = ptr;
+            }
+            tmp = seq;
+            down_counter = seq_len;
+        }
+        else
+        {
+            current++;
+        }
+    }
+    return found_ptr;
 }
 
-void* Fil_searchi(Fil *fil, const char *seq, unsigned int index)
+const char* Fil_searchi(Fil *fil, const char *seq, unsigned int index)
 {
+    if (!fil || !seq) return ((void*)0);
+
+    const char *tmp = seq;
+    unsigned long seq_len = Fil_len(seq);
+    unsigned long down_counter = seq_len;
+    char *current = fil->string;
+    unsigned long found = 0;
+
+    while (*current)
+    {
+        if (*current == *tmp)
+        {
+            char *ptr = current;
+            while(*current == *tmp && down_counter)
+            {
+                current++;
+                tmp++;
+                down_counter--;
+            }
+            if (!down_counter)
+            {
+                found++;
+                if (found == index)
+                {
+                    return ptr;
+                }
+            }
+            tmp = seq;
+            down_counter = seq_len;
+        }
+        else
+        {
+            current++;
+        }
+    }
     return ((void*)0);
 }

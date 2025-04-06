@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#define PRINT_FIL(fil) (printf("Cap: %lu, Len: %lu, String: %s\n", ((Fil)fil).capacity, ((Fil)fil).len, ((Fil)fil).string))
+#define PRINT_FIL(fil) (printf("Cap: %lu, Len: %lu, String: %s\n", (fil).capacity, (fil).len, (fil).string))
 
 #define PASS(test) (printf("Test passed: %s:%d:%s: %s\n", __FILE__, __LINE__, __func__, #test))
 #define FAIL(test) (fprintf(stderr, "Test failed: %s:%d:%s: %s\n", __FILE__, __LINE__, __func__, #test))
@@ -21,6 +21,9 @@ void Fil_cmp_test(void);
 void Fil_cpy_test(void);
 void Fil_append_test(void);
 void Fil_merge_test(void);
+void Fil_searchf_test(void);
+void Fil_searchl_test(void);
+void Fil_searchi_test(void);
 
 int main(void)
 {
@@ -31,6 +34,9 @@ int main(void)
     Fil_cpy_test();
     Fil_append_test();
     Fil_merge_test();
+    Fil_searchf_test();
+    Fil_searchl_test();
+    Fil_searchi_test();
     return 0;
 }
 
@@ -101,4 +107,34 @@ void Fil_merge_test(void)
 
     Fil_free(&dest);
     Fil_free(&src);
+}
+
+void Fil_searchf_test(void)
+{
+    Fil fil = {0};
+    Fil_append(&fil, "Hello, world!world");
+    
+    const char *ptr = Fil_searchf(&fil, "world");
+    ASSERT(ptr != NULL);
+    ASSERT(Fil_cmp(ptr, "world!world") == 0);
+}
+
+void Fil_searchl_test(void)
+{
+    Fil fil = {0};
+    Fil_append(&fil, "Hello, worldworld!");
+
+    const char *ptr = Fil_searchl(&fil, "world");
+    ASSERT(ptr != NULL);
+    ASSERT(Fil_cmp(ptr, "world!") == 0);
+}
+
+void Fil_searchi_test(void)
+{
+    Fil fil = {0};
+    Fil_append(&fil, "Hello, world!world!world!");
+    
+    const char *ptr = Fil_searchi(&fil, "world", 2);
+    ASSERT(ptr != NULL);
+    ASSERT(Fil_cmp(ptr, "world!world!") == 0);
 }

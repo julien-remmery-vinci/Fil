@@ -82,7 +82,7 @@ unsigned long Fil_cpy(char *dest, const char *src);
  * Compares s1 to s2.
  * Returns 0 if s1 == s2, positive integer otherwise.
  */
-unsigned long Fil_cmp(char *s1, const char *s2);
+unsigned long Fil_cmp(const char *s1, const char *s2);
 
 /**
  * Append a string to your Fil.
@@ -121,18 +121,19 @@ int Fil_replacei(Fil *fil, const char *seq, unsigned int index);
  * Look for the first occurence of seq in the Fil.
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-void* Fil_searchf(Fil *fil, const char *seq);
+const char* Fil_searchf(Fil *fil, const char *seq);
 
 /**
  * Look for the last occurence of seq in the Fil.
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-void* Fil_searchl(Fil *fil, const char *seq);
+const char* Fil_searchl(Fil *fil, const char *seq);
 
 /**
- * Look for the index-th occurence of seq in the Fil.
+ * Look for the index-th occurence of seq in the Fil, starting at 1.
+ * Fil_searchi(&fil, "example", 1) does the same as Fil_searchf(&fil, "example").
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-void* Fil_searchi(Fil *fil, const char *seq, unsigned int index);
+const char* Fil_searchi(Fil *fil, const char *seq, unsigned int index);
 
 #endif // FIL_H
