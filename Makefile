@@ -42,7 +42,7 @@ main_build: $(SRC) $(INCLUDE) $(MAIN_SRC)
 
 .PHONY: test_build
 test_build: $(SRC) $(INCLUDE) $(TEST_SRC)
-	$(CC) $(CFLAGS) -o $(TEST_TARGET) $(SRC) $(TEST_SRC)
+	$(CC) $(CFLAGS) -g -o $(TEST_TARGET) $(SRC) $(TEST_SRC)
 
 .PHONY: lib_build
 lib_build: $(SRC) $(INCLUDE)
@@ -50,8 +50,8 @@ lib_build: $(SRC) $(INCLUDE)
 	$(CC) -shared -o $(LIB_TARGET).so $(PROJECT_NAME).o
 
 .PHONY: test
-test: test_build
-	@./$(TEST_TARGET)
+test: test_build 
+	@./$(TEST_TARGET) 1> /dev/null
 
 .PHONY: clean
 clean:

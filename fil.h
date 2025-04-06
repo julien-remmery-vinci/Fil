@@ -30,6 +30,7 @@ SOFTWARE.
 #define FIL_NOT_IMPLEMENTED 0x1
 #define FIL_ERR_PARAM       0x2
 #define FIL_ERR_MEMORY      0x3
+#define FIL_ERR_NOSPC       0x4
 
 /**
  * Define FIL_RESIZE_FACTOR before including to use your own resize factor.
@@ -50,6 +51,15 @@ typedef struct {
     unsigned long capacity;     
 } Fil;
 
+#define FIL_MIN(m, n) ((m) < (n) ? (m) : (n))
+#define FIL_MAX(m, n) ((m) > (n) ? (m) : (n))
+
+/**
+ * Internal function used to resize the capacity of a Fil struct string.
+ * Returns 0 on success, positive integer on error.
+ */
+int Fil_resize(Fil *fil, int new_cap);
+
 /**
  * Returns the length of the provided null terminated string, 0 if str is NULL;
  * 
@@ -58,17 +68,25 @@ typedef struct {
 unsigned long Fil_len(const char *str);
 
 /**
- * Internal function used to resize the capacity of a Fil struct string.
+ * Copies src into dest.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_resize(Fil *fil, int resize_factor);
+unsigned long Fil_cpy(char *dest, const char *src);
 
-// Work in progress :
+/**
+ * Compares s1 to s2.
+ * Returns 0 if s1 == s2, positive integer otherwise.
+ */
+unsigned long Fil_cmp(char *s1, const char *s2);
+
 /**
  * Append a string to your Fil.
+ * Null terminates the Fil string, expect + 1 len.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_append(Fil *fil, char *str);
+int Fil_append(Fil *fil, const char *str);
+
+// Work in progress :
 
 /**
  * Merge two Fil structs.
