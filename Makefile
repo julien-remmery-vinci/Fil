@@ -32,7 +32,13 @@ TEST_TARGET := test
 LIB_TARGET := libfil
 
 CC := gcc
-CFLAGS :=
+CFLAGS := -Wall -Wextra -Wpedantic -Werror -Wshadow -Wundef -Wcast-align \
+-Wstrict-prototypes -Wconversion -Wsign-conversion -Wno-unused-parameter \
+-Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wnull-dereference \
+-Wdouble-promotion -Wformat=2 -Wmissing-prototypes -Wno-implicit-fallthrough
+
+VALGRIND := valgrind
+GDB := gdb
 
 all: main_build test_build lib_build
 
@@ -52,6 +58,14 @@ lib_build: $(SRC) $(INCLUDE)
 .PHONY: test
 test: test_build 
 	@./$(TEST_TARGET) 1> /dev/null
+
+.PHONY: valgrind
+valgrind:
+	@$(VALGRIND) ./$(TEST_TARGET)
+
+.PHONY: GDB
+gdb:
+	@$(GDB) ./$(TEST_TARGET)
 
 .PHONY: clean
 clean:

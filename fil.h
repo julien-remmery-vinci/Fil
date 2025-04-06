@@ -55,10 +55,15 @@ typedef struct {
 #define FIL_MAX(m, n) ((m) > (n) ? (m) : (n))
 
 /**
+ * Free allocated memory.
+ */
+void Fil_free(Fil *fil);
+
+/**
  * Internal function used to resize the capacity of a Fil struct string.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_resize(Fil *fil, int new_cap);
+int Fil_resize(Fil *fil, unsigned long new_cap);
 
 /**
  * Returns the length of the provided null terminated string, 0 if str is NULL;

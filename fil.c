@@ -25,7 +25,12 @@ SOFTWARE.
 
 #include <stdlib.h>
 
-int Fil_resize(Fil *fil, int new_cap)
+void Fil_free(Fil *fil)
+{
+    free(fil->string);
+}
+
+int Fil_resize(Fil *fil, unsigned long new_cap)
 {
     if (!fil || new_cap <= 0) return FIL_ERR_PARAM;
 
@@ -46,7 +51,7 @@ unsigned long Fil_len(const char *str)
     {
         ++tmp;
     }
-    return tmp - str;
+    return (unsigned long)(tmp - str);
 }
 
 unsigned long Fil_cpy(char *dest, const char *src)
@@ -79,11 +84,11 @@ int Fil_append(Fil *fil, const char *str)
     if (!fil || !str) return FIL_ERR_PARAM;
 
     unsigned long str_len = Fil_len(str);
-    unsigned long new_len = fil->len + str_len + 1; 
+    unsigned long new_len = fil->len + str_len; 
 
-    if (new_len > fil->capacity)
+    if (new_len + 1 > fil->capacity)
     {
-        if (Fil_resize(fil, FIL_MAX(new_len, fil->capacity * FIL_RESIZE_FACTOR)))
+        if (Fil_resize(fil, FIL_MAX(new_len + 1, fil->capacity * FIL_RESIZE_FACTOR)))
         {
             return FIL_ERR_MEMORY;
         }
@@ -96,6 +101,20 @@ int Fil_append(Fil *fil, const char *str)
 
 int Fil_merge(Fil *dest, Fil *src)
 {
+    if (!dest || !src) return FIL_ERR_PARAM;
+
+    unsigned long new_len = dest->len + src->len; 
+
+    if (new_len + 1 > dest->capacity)
+    {
+        if (Fil_resize(dest, FIL_MAX(new_len + 1, dest->capacity * FIL_RESIZE_FACTOR)))
+        {
+            return FIL_ERR_MEMORY;
+        }
+    }
+    Fil_cpy(dest->string + dest->len, src->string);
+    dest->string[new_len] = 0;
+    dest->len = new_len;
     return FIL_NOT_IMPLEMENTED;
 }
 
