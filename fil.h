@@ -26,11 +26,12 @@ SOFTWARE.
 #define FIL_H
 
 // Error masks
-#define FIL_ERR_NONE        0x0
-#define FIL_NOT_IMPLEMENTED 0x1
-#define FIL_ERR_PARAM       0x2
-#define FIL_ERR_MEMORY      0x3
-#define FIL_ERR_NOSPC       0x4
+#define FIL_ERR_NONE            0x0
+#define FIL_NOT_IMPLEMENTED     0x1
+#define FIL_ERR_PARAM           0x2
+#define FIL_ERR_MEMORY          0x3
+#define FIL_ERR_NOSPC           0x4
+#define FIL_ERR_SEQNOTFOUND     0x4
 
 /**
  * Define FIL_RESIZE_FACTOR before including to use your own resize factor.
@@ -100,22 +101,28 @@ int Fil_append(Fil *fil, const char *str);
 int Fil_merge(Fil *dest, Fil *src);
 
 /**
- * Replace the first occurence of seq in the Fil.
+ * Replace the first occurence of s1 by s2 in the Fil.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_replacef(Fil *fil, const char *seq);
+int Fil_replacef(Fil *fil, const char *s1, const char *s2);
 
 /**
- * Replace all occurences of seq in the Fil.
+ * Replace all occurences of s1 by s2 in the Fil.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_replacea(Fil *fil, const char *seq);
+int Fil_replacea(Fil *fil, const char *s1, const char *s2);
 
 /**
- * Replace the index-th occurence of seq in the Fil.
+ * Replace the last occurence of s1 by s2 in the Fil.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_replacei(Fil *fil, const char *seq, unsigned int index);
+int Fil_replacel(Fil *fil, const char *s1, const char *s2);
+
+/**
+ * Replace the index-th occurence of s1 by s2 in the Fil.
+ * Returns 0 on success, positive integer on error.
+ */
+int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2);
 
 /**
  * Look for the first occurence of seq in the Fil.

@@ -118,18 +118,109 @@ int Fil_merge(Fil *dest, Fil *src)
     return FIL_NOT_IMPLEMENTED;
 }
 
-int Fil_replacef(Fil *fil, const char *seq)
+int Fil_replacef(Fil *fil, const char *s1, const char *s2)
 {
+    if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
+
+    const char *found = Fil_searchf(fil, s1);
+    if (!found) return FIL_ERR_SEQNOTFOUND;
+
+    unsigned long s1_len = Fil_len(s1);
+    unsigned long s1_start = (unsigned long)(found - fil->string);
+    unsigned long s2_len = Fil_len(s2);
+    unsigned long new_len = (fil->len - s1_len) + s2_len;
+
+    if (new_len + 1 > fil->capacity)
+    {
+        if (Fil_resize(fil, FIL_MAX(new_len + 1, fil->capacity * FIL_RESIZE_FACTOR)))
+        {
+            return FIL_ERR_MEMORY;
+        }
+    }
+    Fil_cpy(fil->string + s1_start + s2_len, fil->string + s1_start + s1_len);
+    Fil_cpy(fil->string + s1_start, s2);
+    fil->string[new_len] = 0;
+    fil->len = new_len;
     return FIL_NOT_IMPLEMENTED;
 }
 
-int Fil_replacea(Fil *fil, const char *seq)
+int Fil_replacea(Fil *fil, const char *s1, const char *s2)
 {
+    if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
+    const char *found;
+    do { 
+        found = Fil_searchf(fil, s1);
+        if (!found) return FIL_ERR_SEQNOTFOUND;
+
+        unsigned long s1_len = Fil_len(s1);
+        unsigned long s1_start = (unsigned long)(found - fil->string);
+        unsigned long s2_len = Fil_len(s2);
+        unsigned long new_len = (fil->len - s1_len) + s2_len;
+
+        if (new_len + 1 > fil->capacity)
+        {
+            if (Fil_resize(fil, FIL_MAX(new_len + 1, fil->capacity * FIL_RESIZE_FACTOR)))
+            {
+                return FIL_ERR_MEMORY;
+            }
+        }
+        Fil_cpy(fil->string + s1_start + s2_len, fil->string + s1_start + s1_len);
+        Fil_cpy(fil->string + s1_start, s2);
+        fil->string[new_len] = 0;
+        fil->len = new_len;
+    } while (found);
     return FIL_NOT_IMPLEMENTED;
 }
 
-int Fil_replacei(Fil *fil, const char *seq, unsigned int index)
+int Fil_replacel(Fil *fil, const char *s1, const char *s2)
 {
+    if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
+
+    const char *found = Fil_searchl(fil, s1);
+    if (!found) return FIL_ERR_SEQNOTFOUND;
+
+    unsigned long s1_len = Fil_len(s1);
+    unsigned long s1_start = (unsigned long)(found - fil->string);
+    unsigned long s2_len = Fil_len(s2);
+    unsigned long new_len = (fil->len - s1_len) + s2_len;
+
+    if (new_len + 1 > fil->capacity)
+    {
+        if (Fil_resize(fil, FIL_MAX(new_len + 1, fil->capacity * FIL_RESIZE_FACTOR)))
+        {
+            return FIL_ERR_MEMORY;
+        }
+    }
+    Fil_cpy(fil->string + s1_start + s2_len, fil->string + s1_start + s1_len);
+    Fil_cpy(fil->string + s1_start, s2);
+    fil->string[new_len] = 0;
+    fil->len = new_len;
+    return FIL_NOT_IMPLEMENTED;
+}
+
+int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2)
+{
+    if (!fil || !s1 || index == 0 || !s2) return FIL_ERR_PARAM;
+
+    const char *found = Fil_searchi(fil, s1, index);
+    if (!found) return FIL_ERR_SEQNOTFOUND;
+
+    unsigned long s1_len = Fil_len(s1);
+    unsigned long s1_start = (unsigned long)(found - fil->string);
+    unsigned long s2_len = Fil_len(s2);
+    unsigned long new_len = (fil->len - s1_len) + s2_len;
+
+    if (new_len + 1 > fil->capacity)
+    {
+        if (Fil_resize(fil, FIL_MAX(new_len + 1, fil->capacity * FIL_RESIZE_FACTOR)))
+        {
+            return FIL_ERR_MEMORY;
+        }
+    }
+    Fil_cpy(fil->string + s1_start + s2_len, fil->string + s1_start + s1_len);
+    Fil_cpy(fil->string + s1_start, s2);
+    fil->string[new_len] = 0;
+    fil->len = new_len;
     return FIL_NOT_IMPLEMENTED;
 }
 
@@ -209,7 +300,7 @@ const char* Fil_searchl(Fil *fil, const char *seq)
 
 const char* Fil_searchi(Fil *fil, const char *seq, unsigned int index)
 {
-    if (!fil || !seq) return ((void*)0);
+    if (!fil || !seq || index == 0) return ((void*)0);
 
     const char *tmp = seq;
     unsigned long seq_len = Fil_len(seq);

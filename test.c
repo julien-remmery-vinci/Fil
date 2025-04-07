@@ -24,6 +24,10 @@ void Fil_merge_test(void);
 void Fil_searchf_test(void);
 void Fil_searchl_test(void);
 void Fil_searchi_test(void);
+void Fil_replacef_test(void);
+void Fil_replacea_test(void);
+void Fil_replacel_test(void);
+void Fil_replacei_test(void);
 
 int main(void)
 {
@@ -37,6 +41,10 @@ int main(void)
     Fil_searchf_test();
     Fil_searchl_test();
     Fil_searchi_test();
+    Fil_replacef_test();
+    Fil_replacea_test();
+    Fil_replacel_test();
+    Fil_replacei_test();
     return 0;
 }
 
@@ -137,4 +145,61 @@ void Fil_searchi_test(void)
     const char *ptr = Fil_searchi(&fil, "world", 2);
     ASSERT(ptr != NULL);
     ASSERT(Fil_cmp(ptr, "world!world!") == 0);
+}
+
+void Fil_replacef_test(void)
+{
+    Fil fil = {0};
+    Fil_append(&fil, "foo bar bar baz");
+
+    ASSERT(Fil_replacef(NULL, "Test", "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacef(&fil, NULL, "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacef(&fil, "Test", NULL) & FIL_ERR_PARAM);
+    ASSERT(Fil_replacef(&fil, "Test", "Hello") & FIL_ERR_SEQNOTFOUND);
+
+    Fil_replacef(&fil, "bar", "Hello, world!");
+    ASSERT(Fil_cmp(fil.string, "foo Hello, world! bar baz") == 0);
+}
+
+void Fil_replacea_test(void)
+{
+    Fil fil = {0};
+    Fil_append(&fil, "foo bar bar baz");
+
+    ASSERT(Fil_replacea(NULL, "Test", "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacea(&fil, NULL, "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacea(&fil, "Test", NULL) & FIL_ERR_PARAM);
+    ASSERT(Fil_replacea(&fil, "Test", "Hello") & FIL_ERR_SEQNOTFOUND);
+
+    Fil_replacea(&fil, "bar", "Hello, world!");
+    ASSERT(Fil_cmp(fil.string, "foo Hello, world! Hello, world! baz") == 0);
+}
+
+void Fil_replacel_test(void)
+{
+    Fil fil = {0};
+    Fil_append(&fil, "foo bar bar baz");
+
+    ASSERT(Fil_replacel(NULL, "Test", "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacel(&fil, NULL, "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacel(&fil, "Test", NULL) & FIL_ERR_PARAM);
+    ASSERT(Fil_replacel(&fil, "Test", "Hello") & FIL_ERR_SEQNOTFOUND);
+
+    Fil_replacel(&fil, "bar", "Hello, world!");
+    ASSERT(Fil_cmp(fil.string, "foo bar Hello, world! baz") == 0);
+}
+
+void Fil_replacei_test(void)
+{
+    Fil fil = {0};
+    Fil_append(&fil, "foo bar bar bar baz");
+
+    ASSERT(Fil_replacei(NULL, "Test", 1, "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacei(&fil, NULL, 1, "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacei(&fil, "Test", 1, NULL) & FIL_ERR_PARAM);
+    ASSERT(Fil_replacei(&fil, "Test", 0, "Hello") & FIL_ERR_PARAM);
+    ASSERT(Fil_replacei(&fil, "Test", 1, "Hello") & FIL_ERR_SEQNOTFOUND);
+
+    Fil_replacei(&fil, "bar", 2, "Hello, world!");
+    ASSERT(Fil_cmp(fil.string, "foo bar Hello, world! bar baz") == 0);
 }
