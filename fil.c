@@ -23,6 +23,7 @@ SOFTWARE.
 */
 #include "fil.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 void Fil_free(Fil *fil)
@@ -224,7 +225,7 @@ int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2)
     return FIL_NOT_IMPLEMENTED;
 }
 
-const char* Fil_fstr(Fil *fil, const char *seq)
+char* Fil_fstr(Fil *fil, const char *seq)
 {
     if (!fil || !seq) return ((void*)0);
 
@@ -262,7 +263,7 @@ const char* Fil_fstr(Fil *fil, const char *seq)
     return ((void*)0);
 }
 
-const char* Fil_lstr(Fil *fil, const char *seq)
+char* Fil_lstr(Fil *fil, const char *seq)
 {
     if (!fil || !seq) return ((void*)0);
 
@@ -298,7 +299,7 @@ const char* Fil_lstr(Fil *fil, const char *seq)
     return found_ptr;
 }
 
-const char* Fil_istr(Fil *fil, const char *seq, unsigned int index)
+char* Fil_istr(Fil *fil, const char *seq, unsigned int index)
 {
     if (!fil || !seq || index == 0) return ((void*)0);
 
@@ -338,7 +339,7 @@ const char* Fil_istr(Fil *fil, const char *seq, unsigned int index)
     return ((void*)0);
 }
 
-const char* Fil_fchr(Fil *fil, const char c)
+char* Fil_fchr(Fil *fil, const char c)
 {
     if (!fil) return ((void*)0);
     
@@ -346,28 +347,29 @@ const char* Fil_fchr(Fil *fil, const char c)
     {
         if (fil->string[index] == c)
         {
-            return fil->string+index;
+            return fil->string + index;
         }
     }
     return ((void*)0);
 }
 
-const char* Fil_lchr(Fil *fil, const char c)
+char* Fil_lchr(Fil *fil, const char c)
 {
     if (!fil) return ((void*)0);
 
-    for (unsigned long index = fil->len + 1; index > 0; index--)
+    unsigned long index = fil->len;
+    do
     {
         if (fil->string[index - 1] == c)
         {
-            return fil->string+(index - 1);
+            return fil->string + index - 1;
         }
-    }
+    } while (--index > 0);
     
     return ((void*)0);
 }
 
-const char* Fil_ichr(Fil *fil, const char c, unsigned int c_index)
+char* Fil_ichr(Fil *fil, const char c, unsigned int c_index)
 {
     if (!fil) return ((void*)0);
 
@@ -379,7 +381,7 @@ const char* Fil_ichr(Fil *fil, const char c, unsigned int c_index)
         {
             if (search_index++ == c_index)
             {
-                return fil->string+index;
+                return fil->string + index;
             }
         }
     }

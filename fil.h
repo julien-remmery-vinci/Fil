@@ -128,38 +128,38 @@ int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2);
  * Look for the first occurence of seq in the Fil.
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_fstr(Fil *fil, const char *seq);
+char* Fil_fstr(Fil *fil, const char *seq);
 
 /**
  * Look for the last occurence of seq in the Fil.
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_lstr(Fil *fil, const char *seq);
+char* Fil_lstr(Fil *fil, const char *seq);
 
 /**
  * Look for the index-th occurence of seq in the Fil, starting at 1.
  * Fil_searchi(&fil, "example", 1) does the same as Fil_searchf(&fil, "example").
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_istr(Fil *fil, const char *seq, unsigned int index);
+char* Fil_istr(Fil *fil, const char *seq, unsigned int index);
 
 /**
  * Look for the first occurence of seq in the Fil.
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_fchr(Fil *fil, const char c);
+char* Fil_fchr(Fil *fil, const char c);
 
 /**
  * Look for the last occurence of seq in the Fil.
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_lchr(Fil *fil, const char c);
+char* Fil_lchr(Fil *fil, const char c);
 
 /**
  * Look for the index-th occurence of seq in the Fil, starting at 1.
  * Fil_searchi(&fil, "example", 1) does the same as Fil_searchf(&fil, "example").
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_ichr(Fil *fil, const char c, unsigned int index);
+char* Fil_ichr(Fil *fil, const char c, unsigned int index);
 
 #endif // FIL_H
