@@ -21,9 +21,9 @@ void Fil_cmp_test(void);
 void Fil_cpy_test(void);
 void Fil_append_test(void);
 void Fil_merge_test(void);
-void Fil_searchf_test(void);
-void Fil_searchl_test(void);
-void Fil_searchi_test(void);
+void Fil_fstr_test(void);
+void Fil_lstr_test(void);
+void Fil_istr_test(void);
 void Fil_replacef_test(void);
 void Fil_replacea_test(void);
 void Fil_replacel_test(void);
@@ -38,9 +38,9 @@ int main(void)
     Fil_cpy_test();
     Fil_append_test();
     Fil_merge_test();
-    Fil_searchf_test();
-    Fil_searchl_test();
-    Fil_searchi_test();
+    Fil_fstr_test();
+    Fil_lstr_test();
+    Fil_istr_test();
     Fil_replacef_test();
     Fil_replacea_test();
     Fil_replacel_test();
@@ -117,32 +117,32 @@ void Fil_merge_test(void)
     Fil_free(&src);
 }
 
-void Fil_searchf_test(void)
+void Fil_fstr_test(void)
 {
     Fil fil = {0};
     Fil_append(&fil, "Hello, world!world");
     
-    const char *ptr = Fil_searchf(&fil, "world");
+    const char *ptr = Fil_fstr(&fil, "world");
     ASSERT(ptr != NULL);
     ASSERT(Fil_cmp(ptr, "world!world") == 0);
 }
 
-void Fil_searchl_test(void)
+void Fil_lstr_test(void)
 {
     Fil fil = {0};
     Fil_append(&fil, "Hello, worldworld!");
 
-    const char *ptr = Fil_searchl(&fil, "world");
+    const char *ptr = Fil_lstr(&fil, "world");
     ASSERT(ptr != NULL);
     ASSERT(Fil_cmp(ptr, "world!") == 0);
 }
 
-void Fil_searchi_test(void)
+void Fil_istr_test(void)
 {
     Fil fil = {0};
     Fil_append(&fil, "Hello, world!world!world!");
     
-    const char *ptr = Fil_searchi(&fil, "world", 2);
+    const char *ptr = Fil_istr(&fil, "world", 2);
     ASSERT(ptr != NULL);
     ASSERT(Fil_cmp(ptr, "world!world!") == 0);
 }

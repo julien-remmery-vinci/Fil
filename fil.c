@@ -122,7 +122,7 @@ int Fil_replacef(Fil *fil, const char *s1, const char *s2)
 {
     if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
 
-    const char *found = Fil_searchf(fil, s1);
+    const char *found = Fil_fstr(fil, s1);
     if (!found) return FIL_ERR_SEQNOTFOUND;
 
     unsigned long s1_len = Fil_len(s1);
@@ -149,7 +149,7 @@ int Fil_replacea(Fil *fil, const char *s1, const char *s2)
     if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
     const char *found;
     do { 
-        found = Fil_searchf(fil, s1);
+        found = Fil_fstr(fil, s1);
         if (!found) return FIL_ERR_SEQNOTFOUND;
 
         unsigned long s1_len = Fil_len(s1);
@@ -176,7 +176,7 @@ int Fil_replacel(Fil *fil, const char *s1, const char *s2)
 {
     if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
 
-    const char *found = Fil_searchl(fil, s1);
+    const char *found = Fil_lstr(fil, s1);
     if (!found) return FIL_ERR_SEQNOTFOUND;
 
     unsigned long s1_len = Fil_len(s1);
@@ -202,7 +202,7 @@ int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2)
 {
     if (!fil || !s1 || index == 0 || !s2) return FIL_ERR_PARAM;
 
-    const char *found = Fil_searchi(fil, s1, index);
+    const char *found = Fil_istr(fil, s1, index);
     if (!found) return FIL_ERR_SEQNOTFOUND;
 
     unsigned long s1_len = Fil_len(s1);
@@ -224,7 +224,7 @@ int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2)
     return FIL_NOT_IMPLEMENTED;
 }
 
-const char* Fil_searchf(Fil *fil, const char *seq)
+const char* Fil_fstr(Fil *fil, const char *seq)
 {
     if (!fil || !seq) return ((void*)0);
 
@@ -262,7 +262,7 @@ const char* Fil_searchf(Fil *fil, const char *seq)
     return ((void*)0);
 }
 
-const char* Fil_searchl(Fil *fil, const char *seq)
+const char* Fil_lstr(Fil *fil, const char *seq)
 {
     if (!fil || !seq) return ((void*)0);
 
@@ -298,7 +298,7 @@ const char* Fil_searchl(Fil *fil, const char *seq)
     return found_ptr;
 }
 
-const char* Fil_searchi(Fil *fil, const char *seq, unsigned int index)
+const char* Fil_istr(Fil *fil, const char *seq, unsigned int index)
 {
     if (!fil || !seq || index == 0) return ((void*)0);
 
@@ -335,5 +335,20 @@ const char* Fil_searchi(Fil *fil, const char *seq, unsigned int index)
             current++;
         }
     }
+    return ((void*)0);
+}
+
+const char* Fil_fchr(Fil *fil, const char c)
+{
+    return ((void*)0);
+}
+
+const char* Fil_lchr(Fil *fil, const char c)
+{
+    return ((void*)0);
+}
+
+const char* Fil_ichr(Fil *fil, const char c, unsigned int index)
+{
     return ((void*)0);
 }
