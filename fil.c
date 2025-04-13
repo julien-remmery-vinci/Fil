@@ -340,15 +340,48 @@ const char* Fil_istr(Fil *fil, const char *seq, unsigned int index)
 
 const char* Fil_fchr(Fil *fil, const char c)
 {
+    if (!fil) return ((void*)0);
+    
+    for (unsigned long index = 0; index < fil->len; index++)
+    {
+        if (fil->string[index] == c)
+        {
+            return fil->string+index;
+        }
+    }
     return ((void*)0);
 }
 
 const char* Fil_lchr(Fil *fil, const char c)
 {
+    if (!fil) return ((void*)0);
+
+    for (unsigned long index = fil->len + 1; index > 0; index--)
+    {
+        if (fil->string[index - 1] == c)
+        {
+            return fil->string+(index - 1);
+        }
+    }
+    
     return ((void*)0);
 }
 
-const char* Fil_ichr(Fil *fil, const char c, unsigned int index)
+const char* Fil_ichr(Fil *fil, const char c, unsigned int c_index)
 {
+    if (!fil) return ((void*)0);
+
+    unsigned int search_index = 1;
+    
+    for (unsigned long index = 0; index < fil->len; index++)
+    {
+        if (fil->string[index] == c)
+        {
+            if (search_index++ == c_index)
+            {
+                return fil->string+index;
+            }
+        }
+    }
     return ((void*)0);
 }
