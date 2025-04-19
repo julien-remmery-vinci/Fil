@@ -354,6 +354,7 @@ char *Fil_sfchr(Fil *fil, const char c)
 
     return ((void*)0);
 }
+
 char *Fil_slchr(Fil *fil, const char c)
 {
     if (!fil) return ((void*)0);
@@ -368,6 +369,7 @@ char *Fil_slchr(Fil *fil, const char c)
     
     return ((void*)0);
 }
+
 char *Fil_sichr(Fil *fil, const char c, unsigned long index)
 {
     if (!fil) return ((void*)0);
@@ -390,16 +392,19 @@ int Fil_rfchr(Fil *fil, const char c)
     if (!fil) return FIL_ERR_PARAM;
     return FIL_NOT_IMPLEMENTED;
 }
+
 int Fil_rlchr(Fil *fil, const char c)
 {
     if (!fil) return FIL_ERR_PARAM;
     return FIL_NOT_IMPLEMENTED;
 }
+
 int Fil_richr(Fil *fil, const char c, unsigned long index)
 {
     if (!fil) return FIL_ERR_PARAM;
     return FIL_NOT_IMPLEMENTED;
 }
+
 int Fil_rachr(Fil *fil, const char c)
 {
     if (!fil) return FIL_ERR_PARAM;
