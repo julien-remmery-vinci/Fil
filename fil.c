@@ -23,6 +23,7 @@ SOFTWARE.
 */
 #include "fil.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 void Fil_free(Fil *fil)
