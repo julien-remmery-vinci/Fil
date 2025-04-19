@@ -92,8 +92,6 @@ unsigned long Fil_cmp(const char *s1, const char *s2);
  */
 int Fil_append(Fil *fil, const char *str);
 
-// Work in progress :
-
 /**
  * Merge two Fil structs.
  * Returns 0 on success, positive integer on error.
@@ -104,43 +102,61 @@ int Fil_merge(Fil *dest, Fil *src);
  * Replace the first occurence of s1 by s2 in the Fil.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_replacef(Fil *fil, const char *s1, const char *s2);
+int Fil_rfstr(Fil *fil, const char *s1, const char *s2);
 
 /**
  * Replace all occurences of s1 by s2 in the Fil.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_replacea(Fil *fil, const char *s1, const char *s2);
+int Fil_rastr(Fil *fil, const char *s1, const char *s2);
 
 /**
  * Replace the last occurence of s1 by s2 in the Fil.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_replacel(Fil *fil, const char *s1, const char *s2);
+int Fil_rlstr(Fil *fil, const char *s1, const char *s2);
 
 /**
  * Replace the index-th occurence of s1 by s2 in the Fil.
  * Returns 0 on success, positive integer on error.
  */
-int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2);
+int Fil_ristr(Fil *fil, const char *s1, unsigned long index, const char *s2);
 
 /**
  * Look for the first occurence of seq in the Fil.
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_searchf(Fil *fil, const char *seq);
+char* Fil_sfstr(Fil *fil, const char *seq);
 
 /**
  * Look for the last occurence of seq in the Fil.
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_searchl(Fil *fil, const char *seq);
+char* Fil_slstr(Fil *fil, const char *seq);
 
 /**
  * Look for the index-th occurence of seq in the Fil, starting at 1.
  * Fil_searchi(&fil, "example", 1) does the same as Fil_searchf(&fil, "example").
  * Returns a void* pointer to the found occurence, NULL if not found. 
  */
-const char* Fil_searchi(Fil *fil, const char *seq, unsigned int index);
+char* Fil_sistr(Fil *fil, const char *seq, unsigned long index);
+
+
+/**
+ * Work in progress:
+ * - Search and replace functions with chars on fil.string.
+ * - Search and replace utility functions, on char*, might be used with fil.string ?
+ * - Implement tests
+ */
+char *Fil_sfchr(Fil *fil, const char c);
+char *Fil_slchr(Fil *fil, const char c);
+char *Fil_sichr(Fil *fil, const char c, unsigned long index);
+
+int Fil_rfchr(Fil *fil, const char c);
+int Fil_rlchr(Fil *fil, const char c);
+int Fil_richr(Fil *fil, const char c, unsigned long index);
+int Fil_rachr(Fil *fil, const char c);
+// const char *Fil_strsf(const char *s1, const char *s2);
+// const char *Fil_strsf(const char *s1, const char *s2);
 
 #endif // FIL_H

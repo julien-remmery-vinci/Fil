@@ -118,11 +118,11 @@ int Fil_merge(Fil *dest, Fil *src)
     return FIL_NOT_IMPLEMENTED;
 }
 
-int Fil_replacef(Fil *fil, const char *s1, const char *s2)
+int Fil_rfstr(Fil *fil, const char *s1, const char *s2)
 {
     if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
 
-    const char *found = Fil_searchf(fil, s1);
+    const char *found = Fil_sfstr(fil, s1);
     if (!found) return FIL_ERR_SEQNOTFOUND;
 
     unsigned long s1_len = Fil_len(s1);
@@ -144,17 +144,17 @@ int Fil_replacef(Fil *fil, const char *s1, const char *s2)
     return FIL_NOT_IMPLEMENTED;
 }
 
-int Fil_replacea(Fil *fil, const char *s1, const char *s2)
+int Fil_rastr(Fil *fil, const char *s1, const char *s2)
 {
     if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
     const char *found;
+    const unsigned long s1_len = Fil_len(s1);
+    const unsigned long s2_len = Fil_len(s2);
     do { 
-        found = Fil_searchf(fil, s1);
+        found = Fil_sfstr(fil, s1);
         if (!found) return FIL_ERR_SEQNOTFOUND;
 
-        unsigned long s1_len = Fil_len(s1);
         unsigned long s1_start = (unsigned long)(found - fil->string);
-        unsigned long s2_len = Fil_len(s2);
         unsigned long new_len = (fil->len - s1_len) + s2_len;
 
         if (new_len + 1 > fil->capacity)
@@ -172,11 +172,11 @@ int Fil_replacea(Fil *fil, const char *s1, const char *s2)
     return FIL_NOT_IMPLEMENTED;
 }
 
-int Fil_replacel(Fil *fil, const char *s1, const char *s2)
+int Fil_rlstr(Fil *fil, const char *s1, const char *s2)
 {
     if (!fil || !s1 || !s2) return FIL_ERR_PARAM;
 
-    const char *found = Fil_searchl(fil, s1);
+    const char *found = Fil_slstr(fil, s1);
     if (!found) return FIL_ERR_SEQNOTFOUND;
 
     unsigned long s1_len = Fil_len(s1);
@@ -198,11 +198,11 @@ int Fil_replacel(Fil *fil, const char *s1, const char *s2)
     return FIL_NOT_IMPLEMENTED;
 }
 
-int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2)
+int Fil_ristr(Fil *fil, const char *s1, unsigned int index, const char *s2)
 {
     if (!fil || !s1 || index == 0 || !s2) return FIL_ERR_PARAM;
 
-    const char *found = Fil_searchi(fil, s1, index);
+    const char *found = Fil_sistr(fil, s1, index);
     if (!found) return FIL_ERR_SEQNOTFOUND;
 
     unsigned long s1_len = Fil_len(s1);
@@ -224,7 +224,7 @@ int Fil_replacei(Fil *fil, const char *s1, unsigned int index, const char *s2)
     return FIL_NOT_IMPLEMENTED;
 }
 
-const char* Fil_searchf(Fil *fil, const char *seq)
+const char* Fil_sfstr(Fil *fil, const char *seq)
 {
     if (!fil || !seq) return ((void*)0);
 
@@ -262,7 +262,8 @@ const char* Fil_searchf(Fil *fil, const char *seq)
     return ((void*)0);
 }
 
-const char* Fil_searchl(Fil *fil, const char *seq)
+// TODO : upgrade idea, start search from the end of the string.
+const char* Fil_slstr(Fil *fil, const char *seq)
 {
     if (!fil || !seq) return ((void*)0);
 
@@ -298,7 +299,7 @@ const char* Fil_searchl(Fil *fil, const char *seq)
     return found_ptr;
 }
 
-const char* Fil_searchi(Fil *fil, const char *seq, unsigned int index)
+const char* Fil_sistr(Fil *fil, const char *seq, unsigned int index)
 {
     if (!fil || !seq || index == 0) return ((void*)0);
 
@@ -336,4 +337,70 @@ const char* Fil_searchi(Fil *fil, const char *seq, unsigned int index)
         }
     }
     return ((void*)0);
+}
+
+const char *Fil_sfchr(Fil *fil, const char c)
+{
+    if (!fil) return ((void*)0);
+
+    for (unsigned long index = 0; index < fil->len; index++)
+    {
+        if (fil->string[index] == c)
+        {
+            return fil->string + index;
+        }
+    }
+
+    return ((void*)0);
+}
+const char *Fil_slchr(Fil *fil, const char c)
+{
+    if (!fil) return ((void*)0);
+
+    for (unsigned long index = fil->len + 1; index > 0; index++)
+    {
+        if (fil->string[index - 1] == c)
+        {
+            return fil->string + index - 1;
+        }
+    }
+    
+    return ((void*)0);
+}
+const char *Fil_sichr(Fil *fil, const char c, unsigned long index)
+{
+    if (!fil) return ((void*)0);
+
+    unsigned long found_index = 1;
+
+    for (unsigned long search_index = 0; search_index < fil->len; search_index++)
+    {
+        if (fil->string[search_index] == c && found_index++ == index)
+        {
+            return fil->string + search_index;
+        }
+    }
+
+    return ((void*)0);
+}
+
+int Fil_rfchr(Fil *fil, const char c)
+{
+    if (!fil) return FIL_ERR_PARAM;
+    return FIL_NOT_IMPLEMENTED;
+}
+int Fil_rlchr(Fil *fil, const char c)
+{
+    if (!fil) return FIL_ERR_PARAM;
+    return FIL_NOT_IMPLEMENTED;
+}
+int Fil_richr(Fil *fil, const char c, unsigned long index)
+{
+    if (!fil) return FIL_ERR_PARAM;
+    return FIL_NOT_IMPLEMENTED;
+}
+int Fil_rachr(Fil *fil, const char c)
+{
+    if (!fil) return FIL_ERR_PARAM;
+    return FIL_NOT_IMPLEMENTED;
 }
