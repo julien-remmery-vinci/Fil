@@ -25,6 +25,11 @@ SOFTWARE.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 void Fil_free(Fil *fil)
 {
@@ -74,10 +79,10 @@ unsigned long Fil_cmp(const char *s1, const char *s2)
     {
         if (*s1++ != *s2++)
         {
-            return 1;
+            return FIL_CNEQ;
         }
     }
-    return 0;
+    return FIL_CEQ;
 }
 
 int Fil_append(Fil *fil, const char *str)
@@ -359,7 +364,7 @@ char *Fil_slchr(Fil *fil, const char c)
 {
     if (!fil) return ((void*)0);
 
-    for (unsigned long index = fil->len + 1; index > 0; index++)
+    for (unsigned long index = fil->len + 1; index > 0; index--)
     {
         if (fil->string[index - 1] == c)
         {
@@ -409,4 +414,46 @@ int Fil_rachr(Fil *fil, const char c)
 {
     if (!fil) return FIL_ERR_PARAM;
     return FIL_NOT_IMPLEMENTED;
+}
+
+int Fil_read_from_file(Fil *fil, const char *path)
+{
+    if (!fil || !path) return FIL_ERR_PARAM;
+
+    struct stat stat_buf;
+    int ret = stat(path, &stat_buf);
+    if (ret < 0 && errno == ENOENT)
+    {
+        return FIL_ERR_FILE_NOT_FOUND;
+    }
+    Fil_free(fil);
+    Fil_resize(fil, (unsigned long)stat_buf.st_size + 1);
+    FILE* file = fopen(path, "r");
+    if (!file)
+    {
+        fprintf(stderr, "Fil file open error: %s\n", strerror(errno));
+        return FIL_ERR_FILE_OPEN;
+    }
+    size_t nread = fread(fil->string, sizeof(char), (unsigned long)stat_buf.st_size, file);
+    if ((long)nread != stat_buf.st_size) return FIL_ERR_FILE_READ;
+    fil->len = (unsigned long)stat_buf.st_size;
+    fil->string[fil->len] = '\0';
+    return 0;
+}
+
+int Fil_write_to_file(Fil *fil, const char *path, int overwrite)
+{
+    if (!fil || !path) return FIL_ERR_PARAM;
+
+    struct stat stat_buf;
+    int ret = stat(path, &stat_buf);
+    if (ret < 0 && errno != ENOENT && !overwrite)
+    {
+        return FIL_ERR_OVERWRITE;
+    }
+    FILE* file = fopen(path, "w");
+    if (!file) return FIL_ERR_FILE_NOT_FOUND;
+    size_t nwrite = fwrite(fil->string, sizeof(char), fil->len, file);
+    if ((unsigned long)nwrite != fil->len) return FIL_ERR_FILE_WRITE;
+    return 0;
 }

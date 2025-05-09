@@ -26,12 +26,17 @@ SOFTWARE.
 #define FIL_H
 
 // Error masks
-#define FIL_ERR_NONE            0x0
-#define FIL_NOT_IMPLEMENTED     0x1
-#define FIL_ERR_PARAM           0x2
-#define FIL_ERR_MEMORY          0x3
-#define FIL_ERR_NOSPC           0x4
-#define FIL_ERR_SEQNOTFOUND     0x4
+#define FIL_ERR_NONE                0x0
+#define FIL_NOT_IMPLEMENTED         0x1
+#define FIL_ERR_PARAM               0x2
+#define FIL_ERR_MEMORY              0x3
+#define FIL_ERR_NOSPC               0x4
+#define FIL_ERR_SEQNOTFOUND         0x4
+#define FIL_ERR_FILE_NOT_FOUND      0x5
+#define FIL_ERR_FILE_OPEN           0x6
+#define FIL_ERR_FILE_READ           0x7
+#define FIL_ERR_OVERWRITE           0x8
+#define FIL_ERR_FILE_WRITE          0x9
 
 /**
  * Define FIL_RESIZE_FACTOR before including to use your own resize factor.
@@ -79,6 +84,8 @@ unsigned long Fil_len(const char *str);
  */
 unsigned long Fil_cpy(char *dest, const char *src);
 
+#define FIL_CEQ     0
+#define FIL_CNEQ    1
 /**
  * Compares s1 to s2.
  * Returns 0 if s1 == s2, positive integer otherwise.
@@ -158,5 +165,8 @@ int Fil_richr(Fil *fil, const char c, unsigned long index);
 int Fil_rachr(Fil *fil, const char c);
 // const char *Fil_strsf(const char *s1, const char *s2);
 // const char *Fil_strsf(const char *s1, const char *s2);
+
+int Fil_read_from_file(Fil *fil, const char *path);
+int Fil_write_to_file(Fil *fil, const char *path, int overwrite);
 
 #endif // FIL_H
